@@ -1,5 +1,5 @@
-import { jwt } from "jsonwebtoken";
-import User from "../models/User";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 // class auth {
 //     checkUserAuth = () => {
@@ -13,7 +13,6 @@ const auth = {
         let token;
         if(authorization && authorization.split(' ')[0] === "Bearer") {
             token = authorization.split(' ')[1];
-            return token
         } else {
             console.log('token is not available');
         }
