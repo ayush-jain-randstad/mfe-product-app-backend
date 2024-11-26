@@ -16,16 +16,15 @@ const authController = {
                 const isPasswordValid = await bcrypt.compare(password, user.password);
                 if((email === user.email) && isPasswordValid) {
                     const token = jwt.sign({ userId: user.id} , process.env.JWT_SECRET_KEY , { expiresIn: '5d' });
-                    res.send({'status':200, 'message':'Login successfully','token':token, userDetails:user})
+                    res.status(200).send({'status':200, 'message':'Login successfully','token':token, userDetails:user})
                 } else {
-                    res.send({'status':201, 'message':'Email or password does not match'})
+                    res.status(401).send({'status':401, 'message':'Email or password does not match'})
                 }
             } else {
-                res.send({'status':201, 'message':'Email is not valid'})
+                res.status(401).send({'status':401, 'message':'Email is not valid'})
             }
         } else {
-            console.log('email or password not available');
-            
+            res.status(401).send({'status':401, 'message':'Email or password not available'})
         }
         
     },

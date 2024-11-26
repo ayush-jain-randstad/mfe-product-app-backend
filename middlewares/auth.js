@@ -14,10 +14,10 @@ const auth = {
         if(authorization && authorization.split(' ')[0] === "Bearer") {
             token = authorization.split(' ')[1];
         } else {
-            console.log('token is not available');
+            res.status(401).send({'status':401,'message': 'Token not available'})
         }
         if(!token){
-            res.send({'status':201, 'message': 'Token not available'})
+            res.status(401).send({'status':401,'message': 'Token not available'})
         } else {
             try {
                 const { userId } = jwt.verify(token, process.env.JWT_SECRET_KEY)
@@ -27,8 +27,8 @@ const auth = {
                 })
                 next()
             } catch (error) {
-                console.log('error',error);
-                res.send({'status':201, 'message': 'Unauthorized Token'})                
+                res.status(401).send({'status':401,'message': 'Unauthorized Token'})
+
             }
           
         }
@@ -37,3 +37,10 @@ const auth = {
 }
 
 export default auth
+
+
+
+// refresh token functionality
+// change status code
+// create helper file for error handling
+// cypress and jest test cases
