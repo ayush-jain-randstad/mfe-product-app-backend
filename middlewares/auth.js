@@ -1,11 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-
-// class auth {
-//     checkUserAuth = () => {
-
-//     }
-// }
+import response from "../helpers/response.js";
 
 const auth = {
     checkUserAuth: (req, res, next) => {
@@ -14,10 +9,11 @@ const auth = {
         if(authorization && authorization.split(' ')[0] === "Bearer") {
             token = authorization.split(' ')[1];
         } else {
-            console.log('token is not available');
+            return response.sendUnauthorized(res,'Token not available')
         }
         if(!token){
-            res.send({'status':201, 'message': 'Token not available'})
+            return response.sendUnauthorized(res,'Token not available')
+
         } else {
             try {
                 const { userId } = jwt.verify(token, process.env.JWT_SECRET_KEY)
@@ -27,8 +23,8 @@ const auth = {
                 })
                 next()
             } catch (error) {
-                console.log('error',error);
-                res.send({'status':201, 'message': 'Unauthorized Token'})                
+                return response.sendUnauthorized(res,'Unauthorized Token')
+
             }
           
         }
@@ -37,3 +33,10 @@ const auth = {
 }
 
 export default auth
+
+
+
+// refresh token functionality
+// change status code
+// create helper file for error handling
+// cypress and jest test cases
