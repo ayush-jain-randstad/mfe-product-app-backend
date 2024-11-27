@@ -16,7 +16,6 @@ const authController = {
                 const isPasswordValid = await bcrypt.compare(password, user.password);
                 if((email === user.email) && isPasswordValid) {
                     const token = jwt.sign({ userId: user.id} , process.env.JWT_SECRET_KEY , { expiresIn: '5d' });
-                    user.token = token
                     res.status(200).send({'status':200, 'message':'Login successfully','token':token, userDetails:user})
                 } else {
                     return response.sendUnauthorized(res,'Email or password does not match')
