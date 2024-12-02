@@ -60,8 +60,28 @@ const authController = {
         }
         
         
-    }
+    },
 
+    register: async(req, res) => {
+        const {email, password, name, confirmPassword} = req.body
+        console.log(email, password, name, confirmPassword)
+        if (password !== confirmPassword) {
+            response.sendUnauthorized(res, 'Password does not match')
+        } else {
+            if(email && password && name && confirmPassword) {
+                const salt = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(password, salt);
+                const user = await User.create({email:email, password:hashedPassword, name:name})
+                if(user) {
+                    const token = jwt.sign({ userId: user.id} , process.env.JWT_SECRET_KEY , { expiresIn: '5d' });
+                    return res.send({'status':200, 'message':'Register successfully','token':token, userDetails:user})
+                }
+            } else {
+                 return response.sendError(res,'Email already exist')
+                }
+        }
+    }
 }
+
 
 export default authController
